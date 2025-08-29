@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectAI - Inteligentna Automatyzacja Procesów</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1e3a8a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1d4ed8;
+            text-decoration: none;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-menu a {
+            text-decoration: none;
+            color: #1e3a8a;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-menu a:hover {
+            color: #3b82f6;
+        }
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 250px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.25);
+            border-radius: 8px;
+            z-index: 9999;
+            top: calc(100% + 15px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1 !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-content a {
+            color: #1e3a8a !important;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.05);
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background: #f8fafc;
+            color: #3b82f6 !important;
+        }
+        .dropdown > a::after {
+            content: ' ▼';
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        .dropdown:hover > a::after {
+            transform: rotate(180deg);
+        }
+        .cta-button {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+        }
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #475569;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #1d4ed8;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        /* Process Section */
+        .process-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .process-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .process-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .process-section .section-title {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .process-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .process-timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 50px;
+            bottom: 50px;
+            width: 4px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            transform: translateX(-50%);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .step-icon {
+            margin-bottom: 2rem;
+            z-index: 2;
+        }
+        
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .icon-circle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .step-content:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-content h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .step-content p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        /* Trial Period Section */
+        .trial-period {
+            padding: 6rem 2rem 4rem;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .trial-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .trial-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .trial-period h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        
+        .trial-period p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+        
+        .trial-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+        
+        .trial-buttons .cta-button {
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+        }
+        
+        .trial-buttons .btn-secondary {
+            border-color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .trial-buttons .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: white;
+        }
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1e3a8a;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(59, 130, 246, 0.05);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1e3a8a;
+        }
+        .feature-card p {
+            color: #475569;
+            line-height: 1.7;
+        }
+        /* FAQ Section */
+        .faq-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+            line-height: 1.7;
+        }
+        
+        .faq-list {
+            margin-bottom: 4rem;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.05);
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(248, 250, 252, 0.8));
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+        }
+        
+        .faq-question h3 {
+            color: #1e3a8a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            flex: 1;
+            padding-right: 1rem;
+        }
+        
+        .faq-icon {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: white;
+        }
+        
+        .faq-answer p {
+            padding: 0 1.5rem 1rem;
+            margin: 0;
+            color: #475569;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        .faq-answer p:last-child {
+            padding-bottom: 1.5rem;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 600px;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            background: rgba(59, 130, 246, 0.2);
+        }
+        
+        .faq-cta {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(255, 255, 255, 0.8));
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .faq-cta h3 {
+            color: #1e3a8a;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .faq-cta p {
+            color: #475569;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* About Section */
+        .about {
+            padding: 4rem 2rem;
+            background: white;
+        }
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            max-width: 800px;
+        }
+        .about p {
+            font-size: 1.1rem;
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .footer-section p, .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        .footer-section a:hover {
+            color: white;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+            .dropdown-content {
+                position: static;
+                display: block;
+                box-shadow: none;
+                background: transparent;
+                margin-top: 0;
+                border: none;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .trial-period h1 {
+                font-size: 2rem;
+            }
+            .trial-period p {
+                font-size: 1.1rem;
+            }
+            .trial-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            /* Process Section Mobile */
+            .process-section .section-title {
+                font-size: 2rem;
+            }
+            .timeline-line {
+                display: none;
+            }
+            .process-step {
+                margin-bottom: 2rem;
+            }
+            .step-content {
+                max-width: 100%;
+            }
+            .icon-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feature-card, .service-item {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .feature-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .feature-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">ConnectAI</a>
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li class="dropdown">
+                        <a href="#uslugi">Rozwiązania</a>
+                        <div class="dropdown-content">
+                            <a href="chatbot.html">Chatboty</a>
+                            <a href="infolinia.html">Inteligentna Infolinia</a>
+                            <a href="#integracja-systemow">Integracja Systemów</a>
+                            <a href="#analityka">Analityka Biznesowa</a>
+                            <a href="#chatboty">Chatboty AI</a>
+                            <a href="#rpa">RPA Solutions</a>
+                        </div>
+                    </li>
+                    <li><a href="chatbot.html">Chatbot</a></li>
+                    <li><a href="infolinia.html">Infolinia</a></li>
+                    <li class="dropdown">
+                        <a href="#okres-probny">Okres Próbny</a>
+                    </li>
+                    <li><a href="#o-nas">O Nas</a></li>
+                    <li><a href="#kontakt">Kontakt</a></li>
+                </ul>
+            </div>
+            <a href="https://calendly.com/jan-connectai/30min?month=2025-08&date=2025-08-29" class="cta-button" target="_blank">Skontaktuj się</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <h1>Inteligentna Automatyzacja Procesów</h1>
+            <p>Przekształcamy Twój biznes dzięki zaawansowanej sztucznej inteligencji. Automatyzuj procesy, zwiększ efektywność i osiągaj lepsze rezultaty z ConnectAI.</p>
+            <div class="hero-buttons">
+                <a href="#uslugi" class="cta-button">Poznaj nasze rozwiązania</a>
+                <a href="https://calendly.com/jan-connectai/30min?month=2025-08&date=2025-08-29" class="btn-secondary" target="_blank">Dowiedz się więcej</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="process-container">
+            <h2 class="section-title">Twój Sukces z AI w 5 Przejrzystych Krokach</h2>
+            <p class="process-subtitle">Od pierwszej rozmowy po pełne wsparcie – nasz sprawdzony proces zapewnia, że wdrożenie AI będzie dla Ciebie proste, szybkie i przyniesie oczekiwane rezultaty. Zobacz, jak to robimy:</p>
+            
+            <div class="process-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="process-step">
+                    <div class="step-icon">
+                        <div class="icon-circle">✓</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <h3>Rozmowa i Odkrycie Potrzeb</h3>
+                        <p>Rozpoczynamy od nieobowiązującej rozmowy, podczas której słuchamy o Twoich wyzwaniach, celach i specyfice Twojego biznesu. Sami zaproponujemy najlepsze rozwiązania AI dla Twojej firmy i przedstawimy na żywo, jak one działają. To Twój czas, by zadać wszystkie pytania.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-icon">
+                        <div class="icon-circle">🔍</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <h3>Analiza i Plan Działania</h3>
+                        <p>Dokładnie analizujemy Twoje procesy, aby zidentyfikować obszary, w których AI przyniesie największe korzyści. Przedstawiamy Ci konkretny plan działania i potencjalny zwrot z inwestycji.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-icon">
+                        <div class="icon-circle">⚙️</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <h3>Budowa Twojego Systemu AI</h3>
+                        <p>Nasi eksperci projektują i tworzą spersonalizowany system AI, idealnie dopasowany do Twoich unikalnych potrzeb i gotowy do integracji z obecnymi narzędziami.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-icon">
+                        <div class="icon-circle">🚀</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <h3>Wdrożenie i Testy</h3>
+                        <p>Płynnie wdrażamy system AI w Twojej firmie. Razem z Tobą testujemy wszystko, aby upewnić się, że działa bez zarzutu.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-icon">
+                        <div class="icon-circle">💼</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <h3>Wsparcie, Rozwój i Sukces!</h3>
+                        <p>Po implementacji nie zostajesz sam. Zapewniamy ciągłe wsparcie, monitorujemy efektywność i optymalizujemy system, aby Twoje AI zawsze przynosiło maksymalne korzyści.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trial Period Section -->
+    <section id="okres-probny" class="trial-period">
+        <div class="trial-container">
+            <div class="trial-icon">🎁</div>
+            <h1>Przetestuj Moc AI w Swojej Firmie Bez Żadnego Ryzyka!</h1>
+            <p>Rozumiemy, że wdrożenie sztucznej inteligencji może wydawać się złożone i ryzykowne. Dlatego oferujemy Ci coś wyjątkowego: podczas bezpłatnej, niezobowiązującej rozmowy online, wspólnie znajdziemy procesy w Twojej firmie, w których AI przyniesie Ci największe korzyści. Następnie stworzymy i uruchomimy dedykowany system AI na 7 dni – całkowicie za darmo.</p>
+            <p>Zobacz na własne oczy, jak automatyzacja może odciążyć Twoją firmę i realnie poprawić wyniki. Zero ukrytych kosztów. Zero zobowiązań. Jeśli po tygodniu nie dostrzeżesz wymiernych korzyści – nic nie płacisz. To nasze zobowiązanie wobec jakości naszych rozwiązań.</p>
+            <div class="trial-buttons">
+                <a href="https://calendly.com/jan-connectai/30min?month=2025-08&date=2025-08-29" class="cta-button" target="_blank">Umów Bezpłatną Konsultację</a>
+                <a href="https://calendly.com/jan-connectai/30min?month=2025-08&date=2025-08-29" class="btn-secondary" target="_blank">Dowiedz się więcej o ConnectAI</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="uslugi" class="features">
+        <div class="features-container">
+            <h2 class="section-title">Nasze Rozwiązania AI</h2>
+            <div class="features-grid">
+                <div class="feature-card" onclick="window.location.href='chatbot.html';" style="cursor: pointer;">
+                    <div class="feature-icon">💬</div>
+                    <h3>Chatboty</h3>
+                    <p>💬 <strong>Inteligentne Chatboty AI – Twój asystent online 24/7</strong> Zadbaj o błyskawiczną obsługę klientów na stronie www, w social mediach czy komunikatorach. Nasze chatboty AI prowadzą naturalne rozmowy w <strong>20+ językach</strong>, odpowiadają na pytania, prezentują ofertę i rezerwują terminy – dokładnie tak, jak zrobiłby to pracownik obsługi.</p>
+                </div>
+                <div class="feature-card" onclick="window.location.href='infolinia.html';" style="cursor: pointer;">
+                    <div class="feature-icon">📞</div>
+                    <h3>Inteligentna Infolinia</h3>
+                    <p><strong>Inteligentna Infolinia AI</strong> to nowoczesne rozwiązanie telefoniczne, które działa jak prawdziwa recepcjonistka. Odbiera połączenia 24/7 w ponad 20 językach, potrafi umawiać klientów, udzielać podstawowych informacji oraz obsługiwać rozmowy w naturalny, ludzki sposób. Może pracować samodzielnie lub wspierać recepcję.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Integracja Systemów</h3>
+                    <p>Łączymy Twoje istniejące systemy z nowoczesnymi rozwiązaniami AI, zapewniając płynną współpracę i maksymalną efektywność.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2 class="section-title">Masz Pytania? Mamy Odpowiedzi!</h2>
+            <p class="faq-subtitle">Rozwiewamy wątpliwości dotyczące wdrażania AI w Twojej firmie. Jeśli nie znajdziesz tu odpowiedzi, po prostu zapytaj!</p>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Ile czasu zajmie wdrożenie systemu AI do mojej firmy?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Czas wdrożenia zależy od złożoności projektu - standardowe rozwiązania 1-2 tygodnie, zaawansowane 3-4 tygodnie.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Jak szybko zobaczymy efekty wdrożenia AI?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Efekty widać od razu - pierwsze korzyści w 7-dniowym okresie testowym, pełne rezultaty w ciągu miesiąca.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Czy Wasze AI będzie rosło razem z moją firmą?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>AI rośnie z firmą - system jest skalowalny i adaptuje się do rosnących potrzeb organizacji.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Co jeśli będę potrzebować pomocy po wdrożeniu AI?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Wsparcie całodobowe - oferujemy ciągłą pomoc techniczną, monitoring i optymalizację po wdrożeniu.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Czy moje dane firmowe będą bezpieczne z waszymi systemami AI?</h3>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Pełne bezpieczeństwo danych - stosujemy najwyższe standardy szyfrowania i zgodności z RODO, dane pozostają Twoją własnością.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-cta">
+                <h3>Masz Inne Pytania?</h3>
+                <p>Nadal masz pytania? Chętnie na nie odpowiemy! Skontaktuj się z nami – nasi eksperci są gotowi, by bezpłatnie i bez zobowiązań omówić, jak AI może pomóc Twojej firmie.</p>
+                <a href="https://calendly.com/jan-connectai/30min?month=2025-08&date=2025-08-29" class="cta-button" target="_blank">Porozmawiajmy o Twoich Pytaniach</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="o-nas" class="about">
+        <div class="about-container">
+            <h2 class="section-title">O ConnectAI</h2>
+            <p>Jesteśmy zespołem doświadczonych specjalistów w dziedzinie sztucznej inteligencji i automatyzacji procesów biznesowych. Nasza misja to pomocenie firmom w transformacji cyfrowej przez wykorzystanie najnowszych technologii AI.</p>
+            <p>Współpracujemy z przedsiębiorstwami różnej wielkości, od startupów po międzynarodowe korporacje, dostarczając rozwiązania, które rzeczywiście zmieniają sposób prowadzenia biznesu.</p>
+            <p>Dzięki naszemu doświadczeniu i innowacyjnemu podejściu, pomagamy klientom osiągnąć przewagę konkurencyjną i zwiększyć rentowność poprzez inteligentną automatyzację.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontakt" class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>ConnectAI</h3>
+                    <p>Lider w automatyzacji procesów biznesowych z wykorzystaniem sztucznej inteligencji.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Kontakt</h3>
+                    <p>Email: jan.connectai@gmail.com</p>
+                    <p>Telefon: +48 513 426 800</p>
+                    <p>Adres: ul. Grzybowska 6, Warszawa</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Usługi</h3>
+                    <p><a href="chatbot.html">Chatboty</a></p>
+                    <p><a href="infolinia.html">Inteligentna Infolinia</a></p>
+                    <p><a href="#uslugi">Integracja Systemów</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 ConnectAI. Wszelkie prawa zastrzeżone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript dla rozwijanych FAQ
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+
+    <!-- Retell AI Chat Widget -->
+    <script
+      id="retell-widget"
+      src="https://dashboard.retellai.com/retell-widget.js"
+      type="module"
+      data-public-key="key_7f93c1fdb0f8e3f2cdffbfa2434b"
+      data-agent-id="agent_1bd0da666592867c800581a1b8"
+      data-agent-version="YOUR_RETELL_CHAT_AGENT_VERSION"
+      data-title="Katarzyna z ConnectAI"
+      data-logo-url="https://chatgpt.com/s/m_68b1caf5d59c8191b9f7b63ecd54584a"
+      data-color="#3b82f6"
+    ></script>
+</body>
+</html>
