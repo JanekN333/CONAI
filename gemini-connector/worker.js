@@ -70,7 +70,7 @@ export default {
         }
 
         const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
-        const reply = parts.map((p) => p.text || '').join('').trim();
+        const reply = parts.filter((p) => !p.thought).map((p) => p.text || '').join('').trim();
         return json({ reply, model }, 200, cors);
     },
 };
