@@ -1,0 +1,8 @@
+name = "connectai-gemini"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+GEMINI_MODEL = "gemini-2.5-flash"
+# Domeny, z których strona może wołać connector (po przecinku).
+ALLOWED_ORIGINS = "http://localhost:8000"
