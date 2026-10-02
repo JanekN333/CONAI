@@ -4,11 +4,11 @@
 //
 // Sekrety / zmienne (wrangler secret put / wrangler.toml [vars]):
 //   GEMINI_API_KEY   – klucz z https://aistudio.google.com/apikey (sekret, wymagany)
-//   GEMINI_MODEL     – np. "gemini-2.5-flash" (opcjonalnie)
+//   GEMINI_MODEL     – np. "gemini-3.8-flash" (opcjonalnie)
 //   ALLOWED_ORIGINS  – lista domen po przecinku, np. "https://connectai.pl,http://localhost:8000"
 //   SYSTEM_PROMPT    – instrukcja systemowa asystenta (opcjonalnie)
 
-const DEFAULT_MODEL = 'gemini-2.5-flash';
+const DEFAULT_MODEL = 'gemini-3.8-flash';
 const DEFAULT_SYSTEM_PROMPT =
     'Jesteś asystentem firmy ConnectAI, która wdraża chatboty AI, inteligentne infolinie ' +
     'i automatyzacje procesów. Odpowiadaj po polsku, krótko i konkretnie. ' +

@@ -43,7 +43,7 @@ przeglądarka (gemini-connector.js) ──POST /──> Worker (worker.js) ─�
 ## API proxy
 
 `POST /` z `{"messages": [{"role": "user", "content": "Cześć"}]}` →
-`{"reply": "...", "model": "gemini-2.5-flash"}`.
+`{"reply": "...", "model": "gemini-3.8-flash"}`.
 
 Opcjonalne zmienne: `GEMINI_MODEL` (model Gemini), `SYSTEM_PROMPT`
 (instrukcja systemowa asystenta).
