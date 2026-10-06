@@ -1,0 +1,17 @@
+{
+  "name": "conai",
+  "owner": {
+    "name": "ConnectAI"
+  },
+  "metadata": {
+    "description": "Wtyczki Claude Code od ConnectAI"
+  },
+  "plugins": [
+    {
+      "name": "omniroute",
+      "source": "./plugins/omniroute",
+      "description": "Integracja z bramką AI OmniRoute: serwer MCP (routing, providery, combos, cache, kompresja, zużycie), komendy /omniroute:* i skill z instrukcjami.",
+      "category": "development"
+    }
+  ]
+}
