@@ -15,6 +15,12 @@ Serwer MCP `omniroute` z tej wtyczki łączy się z
 `${OMNIROUTE_URL:-http://localhost:20128}/api/mcp/stream`, a klucz bierze z
 `OMNIROUTE_API_KEY`. Zmienne trzeba ustawić **przed** uruchomieniem Claude Code.
 
+Wymagania po stronie OmniRoute (domyślnie wyłączone!):
+
+- MCP włączone i transport `streamable-http` — w dashboardzie (Endpoints / Settings → MCP)
+  albo: `PATCH /api/settings` z `{"mcpEnabled": true, "mcpTransport": "streamable-http"}`.
+- Klucz API ze scope `manage` (zwykły klucz do inference dostaje `Invalid management token`).
+
 ## Instalacja i start serwera
 
 ```bash
@@ -30,7 +36,7 @@ Dashboard (providerzy, klucze, combos): `http://localhost:20128`.
 
 ## Jak działać
 
-1. Najpierw sprawdź, czy serwer żyje: `curl -s "${OMNIROUTE_URL:-http://localhost:20128}/api/health"`.
+1. Najpierw sprawdź, czy serwer żyje: `curl -s "${OMNIROUTE_URL:-http://localhost:20128}/api/health/ping"`.
    Jeśli nie odpowiada — zaproponuj `omniroute` (lub Docker) zamiast zgadywać.
 2. Do odczytu i zmian konfiguracji (providerzy, modele, combos, cache, kompresja,
    zużycie, budżety) preferuj narzędzia MCP `mcp__plugin_omniroute_omniroute__*`.
@@ -44,7 +50,8 @@ Dashboard (providerzy, klucze, combos): `http://localhost:20128`.
 
 | Endpoint                     | Do czego                                   |
 | ---------------------------- | ------------------------------------------ |
-| `GET /api/health`            | Stan serwera                               |
+| `GET /api/health/ping`       | Czy serwer żyje (bez autoryzacji)          |
+| `GET /api/monitoring/health` | Szczegółowy stan serwera                   |
 | `GET /v1/models`             | Lista modeli i combos dostępnych przez bramkę |
 | `POST /v1/chat/completions`  | Inference zgodny z OpenAI (model `auto` działa bez kluczy) |
 | `POST /v1/messages`          | Inference zgodny z Anthropic (używa go Claude Code) |

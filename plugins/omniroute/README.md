@@ -26,11 +26,14 @@ Lokalnie z klonu repo: `/plugin marketplace add /ścieżka/do/CONAI`.
 
 1. Uruchom OmniRoute: `npm i -g omniroute && omniroute` (albo Docker:
    `docker run -d -p 20128:20128 diegosouzapw/omniroute`).
-2. Ustaw zmienne przed startem Claude Code:
+2. W dashboardzie OmniRoute (`http://localhost:20128`, domyślne hasło `CHANGEME` — zmień je):
+   - włącz MCP i ustaw transport **streamable-http** (Endpoints / Settings),
+   - utwórz klucz API ze scope **`manage`**.
+3. Ustaw zmienne przed startem Claude Code:
 
    ```bash
    export OMNIROUTE_URL=http://localhost:20128   # domyślnie, można pominąć
    export OMNIROUTE_API_KEY=oma_live_...          # klucz z dashboardu OmniRoute
    ```
 
-3. Zrestartuj Claude Code i uruchom `/omniroute:status`.
+4. Zrestartuj Claude Code i uruchom `/omniroute:status`.
