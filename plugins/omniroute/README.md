@@ -22,7 +22,19 @@ W Claude Code:
 
 Lokalnie z klonu repo: `/plugin marketplace add /ścieżka/do/CONAI`.
 
-## Konfiguracja
+## Szybki start (jedna komenda)
+
+Wymaga Node.js 22 lub 24 (https://nodejs.org). W terminalu (macOS / Linux / WSL / Git Bash):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JanekN333/CONAI/claude/zealous-archimedes-5p9i1y/plugins/omniroute/scripts/setup.sh | bash
+```
+
+Skrypt instaluje OmniRoute, uruchamia go w tle, włącza MCP, tworzy klucz API
+ze scope `manage` i zapisuje `OMNIROUTE_API_KEY` w `~/.zshrc` / `~/.bashrc`.
+Potem otwórz nowy terminal, uruchom `claude` i wpisz `/omniroute:status`.
+
+## Konfiguracja ręczna
 
 1. Uruchom OmniRoute: `npm i -g omniroute && omniroute` (albo Docker:
    `docker run -d -p 20128:20128 diegosouzapw/omniroute`).

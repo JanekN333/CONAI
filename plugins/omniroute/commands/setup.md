@@ -7,7 +7,8 @@ allowed-tools: Bash(curl:*), Bash(omniroute:*), Bash(npm ls:*), Bash(which:*), B
 Pomóż użytkownikowi skonfigurować OmniRoute dla Claude Code. Tryb: `$ARGUMENTS` (domyślnie `local`).
 
 1. Sprawdź, co już jest: `which omniroute`, oraz czy `${OMNIROUTE_URL:-http://localhost:20128}/api/health/ping` odpowiada.
-2. Jeśli serwera brak, zaproponuj (nie wykonuj bez zgody):
+2. Najprostsza droga to skrypt, który robi wszystko sam (instalacja, start w tle, włączenie MCP, klucz `manage`, zapis zmiennej): `curl -fsSL https://raw.githubusercontent.com/JanekN333/CONAI/claude/zealous-archimedes-5p9i1y/plugins/omniroute/scripts/setup.sh | bash` — zaproponuj go jako pierwszy.
+   Ręcznie, jeśli serwera brak, zaproponuj (nie wykonuj bez zgody):
    - `local`: `npm i -g omniroute && omniroute`
    - `docker`: `docker run -d --name omniroute -p 20128:20128 diegosouzapw/omniroute`
    - `remote <url>`: tylko ustawienie `OMNIROUTE_URL=<url>`.
